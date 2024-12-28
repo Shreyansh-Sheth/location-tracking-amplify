@@ -11,7 +11,9 @@ import { Button, Input, useAuthenticator } from "@aws-amplify/ui-react";
 
 Amplify.configure(outputs);
 
-const client = generateClient<Schema>();
+const client = generateClient<Schema>({
+  authMode: "userPool",
+});
 
 export default function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
