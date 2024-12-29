@@ -1,4 +1,6 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
+import { listUsers } from "./list-users/resource";
+import { GROUP_NAMES } from "../const";
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -7,11 +9,25 @@ specifies that any user authenticated via an API key can "create", "read",
 "update", and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
-  Todo: a
+  listUserReturnType: a.customType({
+    email: a.email(),
+    username: a.string(),
+  }),
+
+  listUsers: a
+    .query()
+    .arguments({})
+    .returns(a.ref("listUserReturnType").array())
+    .handler(a.handler.function(listUsers))
+    .authorization((allow) => allow.groups([GROUP_NAMES.ADMIN])),
+  Devices: a
     .model({
-      content: a.string(),
+      deviceId: a.string(),
     })
-    .authorization((allow) => [allow.owner()]),
+    .authorization((allow) => [
+      allow.owner(),
+      allow.groups([GROUP_NAMES.USER]),
+    ]),
 });
 
 export type Schema = ClientSchema<typeof schema>;

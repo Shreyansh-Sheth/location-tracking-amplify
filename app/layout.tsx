@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./app.css";
-
 import "@aws-amplify/ui-react/styles.css";
+
 import Providers from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
